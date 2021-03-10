@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @ToString
 @EqualsAndHashCode
-@Table(name = "pet_category")
+@Table(name = "product_category")
 @Entity
 public class ProductCategory extends BaseEntity {
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
-@Table(name="pet")
+@Table(name="products")
 @Getter
 @Setter
 public class Product extends BaseEntity{
@@ -49,6 +49,11 @@ public class Product extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Order> orders=new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "product_shopCart",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "cart_id"))
+    private List<ShoppingCart> carts=new ArrayList<>();
 
 
 

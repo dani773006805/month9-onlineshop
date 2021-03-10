@@ -23,7 +23,7 @@ public class User extends BaseEntity {
 
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -31,4 +31,7 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user")
     private ShoppingCart shoppingCart;
+
+    @OneToOne(mappedBy = "user")
+    private CardDetails cardDetails;
 }

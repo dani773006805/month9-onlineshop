@@ -14,11 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "shopping_cart")
-public class ShoppingCart extends BaseEntity{
+public class ShoppingCart extends BaseEntity {
     @OneToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
-    private List<Product> products=new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "product_shopCart",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> carts = new ArrayList<>();
+
 }
