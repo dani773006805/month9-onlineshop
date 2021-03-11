@@ -24,8 +24,6 @@ public class Order extends BaseEntity {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @Column(name = "status")
-    private String status;
 
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
