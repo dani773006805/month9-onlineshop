@@ -1,6 +1,5 @@
 package com.attractor.onlineshop.services;
 
-import com.attractor.onlineshop.model.Product;
 import com.attractor.onlineshop.model.ProductCategory;
 import com.attractor.onlineshop.repositories.ProductCategoryRepository;
 import org.springframework.stereotype.Service;
