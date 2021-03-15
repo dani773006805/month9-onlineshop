@@ -3,6 +3,7 @@ package com.attractor.onlineshop.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +16,19 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "shopping_cart")
 public class ShoppingCart extends BaseEntity {
-    @OneToOne()
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
-    @JoinTable(name = "product_shopCart",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> carts = new ArrayList<>();
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
+    private List<ShopingCartItem> items=new ArrayList<>();
+
+    private BigDecimal totalPrice;
+    private Integer totalQuantity;
+
+
+
+
 
 }

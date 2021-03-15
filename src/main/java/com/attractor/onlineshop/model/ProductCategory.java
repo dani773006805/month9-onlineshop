@@ -1,5 +1,6 @@
 package com.attractor.onlineshop.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +19,8 @@ public class ProductCategory extends BaseEntity {
 
     @Column(name = "category_name")
     private String name;
-
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
-    private Set<Product> products =new HashSet<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<Product> products = new HashSet<>();
 
 }

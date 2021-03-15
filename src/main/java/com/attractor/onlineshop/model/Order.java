@@ -29,18 +29,12 @@ public class Order extends BaseEntity {
     private LocalDateTime dateCreated;
 
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
-    @JoinTable(name = "product_order",
-    joinColumns = @JoinColumn(name = "order_id"),
-    inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products=new ArrayList<>();
-
-
-
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
 
 }

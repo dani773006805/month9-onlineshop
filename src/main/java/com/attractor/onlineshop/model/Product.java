@@ -1,5 +1,7 @@
 package com.attractor.onlineshop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,10 +15,10 @@ import java.util.List;
 @Builder
 @Data
 @Entity
-@Table(name="products")
+@Table(name = "products")
 @Getter
 @Setter
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
     @Column(name = "name")
     private String name;
@@ -36,25 +38,13 @@ public class Product extends BaseEntity{
     @Column(name = "active")
     private boolean active;
 
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviews=new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "product_order",
-    joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Order> orders=new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "product_shopCart",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "cart_id"))
-    private List<ShoppingCart> carts=new ArrayList<>();
-
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
 
 
 }

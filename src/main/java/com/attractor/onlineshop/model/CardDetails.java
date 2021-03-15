@@ -2,10 +2,7 @@ package com.attractor.onlineshop.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -19,13 +16,11 @@ import java.time.LocalDate;
 public class CardDetails extends BaseEntity {
     private String cardName;
     private String cardType;
-
     private String securityCode;
-
     private String cardNumber;
-
     private LocalDate expirationDate;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 }
