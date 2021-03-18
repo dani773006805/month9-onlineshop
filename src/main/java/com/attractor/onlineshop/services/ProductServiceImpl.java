@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findById(id);
     }
 
-    public Optional<Product> findByIdAndActive(Long id){
+    public Optional<Product> findByIdAndActive(Long id) {
         return productRepository.findByIdAndActiveIsTrue(id);
     }
 
@@ -45,7 +45,13 @@ public class ProductServiceImpl implements ProductService{
     public Product save(Product product) {
         return productRepository.save(product);
     }
-public List<Product> findAll(){
+
+    public List<Product> findAll() {
         return productRepository.findAll();
-}
+    }
+
+    @Override
+    public Page<Product> findByDescription(String word, Pageable pageable) {
+        return productRepository.findByNameContainingOrDescriptionContaining(word,word,pageable);
+    }
 }

@@ -22,5 +22,7 @@ public interface ProductService {
     Product update(Product product);
 
     Product save(Product product);
-    List<Product> findAll();
+
+    Page<Product> findByDescription(String word,Pageable pageable);
+
 }
