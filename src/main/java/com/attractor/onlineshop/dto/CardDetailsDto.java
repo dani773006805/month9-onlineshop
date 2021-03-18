@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Builder
@@ -15,8 +16,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CardDetailsDto {
     private Long id;
+    @Size(min = 3,message = "min length is 3")
     @NotBlank
     private String cardName;
+    @Size(min = 3,message = "min length is 3")
     @NotBlank
     private String cardType;
     @Pattern(regexp = "[0-9]{16}")

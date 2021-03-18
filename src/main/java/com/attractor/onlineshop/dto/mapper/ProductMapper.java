@@ -16,7 +16,7 @@ public class ProductMapper {
 
     public static ProductDto mainPage(Product product){
         return ProductDto.builder()
-                .id(product.getId())
+//                .id(product.getId())
                 .imageUrl(product.getImageUrl())
                 .name(product.getName())
                 .unitPrice(product.getUnitPrice())
