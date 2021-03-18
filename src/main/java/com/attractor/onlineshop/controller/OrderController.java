@@ -6,10 +6,7 @@ import com.attractor.onlineshop.dto.mapper.CardDetailsMapper;
 import com.attractor.onlineshop.dto.mapper.OrderDtoMapper;
 import com.attractor.onlineshop.dto.mapper.OrderItemDtoMapper;
 import com.attractor.onlineshop.exceptions.UserNotFoundException;
-import com.attractor.onlineshop.services.CardDetailsService;
-import com.attractor.onlineshop.services.OrderItemService;
-import com.attractor.onlineshop.services.OrderService;
-import com.attractor.onlineshop.services.UserService;
+import com.attractor.onlineshop.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +49,7 @@ public class OrderController {
     public ResponseEntity<?> saveOrder(@RequestBody @Valid CardDetailsDto cardDetailsDto){
         var userId=1L;
         if(cardDetailsDto.getId()==null){
-            var user=userService.findById(userId).orElseThrow(()->
+            var user= userService.findById(userId).orElseThrow(()->
                     new UserNotFoundException(String.format("User with id %d not found")));
             var card= CardDetailsMapper.fromDtoToEnt(cardDetailsDto);
             card.setUser(user);
