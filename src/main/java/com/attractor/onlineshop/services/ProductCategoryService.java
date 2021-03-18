@@ -1,19 +1,11 @@
 package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.model.ProductCategory;
-import com.attractor.onlineshop.repositories.ProductCategoryRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-@Service
-public class ProductCategoryService {
-    private ProductCategoryRepository productCategoryRepository;
-
-    public ProductCategoryService(ProductCategoryRepository productCategoryRepository) {
-        this.productCategoryRepository = productCategoryRepository;
-    }
-    public List<ProductCategory> findAll(){
-        return productCategoryRepository.findAll();
-    }
+public interface ProductCategoryService {
+    Page<ProductCategory> findAll(Pageable pageable);
 }

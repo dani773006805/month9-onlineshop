@@ -1,26 +1,11 @@
 package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.model.Review;
-import com.attractor.onlineshop.repositories.ReviewRepository;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
-public class ReviewService {
-    private ReviewRepository repository;
-    public ReviewService(ReviewRepository repository) {
-        this.repository = repository;
-    }
+public interface ReviewService {
+    List<Review> findByProductId(Long productId);
 
-    public List<Review> findByProductId(Long productId){
-        return repository.findByProductId(productId);
-    }
-
-    public Review save(Review review){
-        review.setDate(LocalDateTime.now());
-        return repository.save(review);
-    }
+    Review save(Review review);
 }

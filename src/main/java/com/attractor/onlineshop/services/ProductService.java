@@ -1,47 +1,26 @@
 package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.model.Product;
-import com.attractor.onlineshop.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
-@Service
-public class ProductService {
-    private final ProductRepository productRepository;
+public interface ProductService {
+    Page<Product> findByCategoryId(Long id, Pageable pageable);
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    Page<Product> findByName(String name, Pageable pageable);
 
-    public Page<Product> findByCategoryId(Long id, Pageable pageable) {
-        return productRepository.findProductByCategoryIdAndActiveTrue(id, pageable);
-    }
+    Page<Product> findByPrice(BigDecimal price, Pageable pageable);
 
-    public Page<Product> findByName(String name, Pageable pageable) {
-        return productRepository.findByNameContaining(name, pageable);
-    }
+    Optional<Product> findById(Long id);
 
-    public Page<Product> findByPrice(BigDecimal price, Pageable pageable) {
-        return productRepository.findByUnitPriceIsLessThanEqual(price, pageable);
-    }
+    Optional<Product> findByIdAndActive(Long id);
 
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
-    }
+    Product update(Product product);
 
-    public Optional<Product> findByIdAndActive(Long id){
-        return productRepository.findByIdAndActiveIsTrue(id);
-    }
-
-    public Product update(Product product) {
-        return productRepository.save(product);
-    }
-
-    public Product save(Product product) {
-        return productRepository.save(product);
-    }
+    Product save(Product product);
+    List<Product> findAll();
 }
