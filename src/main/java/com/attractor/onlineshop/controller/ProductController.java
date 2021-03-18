@@ -2,13 +2,13 @@ package com.attractor.onlineshop.controller;
 
 import com.attractor.onlineshop.dto.mapper.ProductMapper;
 import com.attractor.onlineshop.exceptions.ResourceNotFoundException;
+import com.attractor.onlineshop.model.Product;
 import com.attractor.onlineshop.services.ProductService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping("/product-category/{id}/products")
     public ResponseEntity<?> getByCategoryId(@PathVariable Long id, Pageable pageable){
-        var products= productServiceImpl.findByCategoryId(id,pageable).map(product -> ProductMapper.fromAll(product));
+        var products= productServiceImpl.findByCategoryId(id,pageable).map(ProductMapper::fromAll);
         return ResponseEntity.ok(products);
     }
 
@@ -37,8 +37,15 @@ public class ProductController {
 
     @GetMapping("/products/findByPrice/{price}")
     public ResponseEntity<?> getByName(@PathVariable BigDecimal price,Pageable pageable){
-        var products= productServiceImpl.findByPrice(price,pageable);
-        var productDto=products.map(product -> ProductMapper.fromAll(product));
+        var productDto= productServiceImpl.findByPrice(price,pageable).map(ProductMapper::fromAll);
+        return ResponseEntity.ok(productDto);
+    }
+
+    @GetMapping("/products/findByNameAndDescriptionContaining/{keyword}")
+    public ResponseEntity<?> getByDescription(@PathVariable String keyword,
+                                              Pageable pageable){
+        var productDto=productServiceImpl.findByDescription(keyword,pageable)
+                .map(ProductMapper::fromAll);
         return ResponseEntity.ok(productDto);
     }
 
