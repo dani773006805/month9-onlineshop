@@ -9,6 +9,7 @@ import com.attractor.onlineshop.exceptions.UserNotFoundException;
 import com.attractor.onlineshop.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,7 +30,7 @@ public class OrderController {
         this.orderItemService = orderItemService;
         this.userService = userService;
     }
-
+@Secured("ROLE_USER")
     @GetMapping
     public ResponseEntity<?> getUserOrders(){
         var userId=0L;
@@ -45,6 +46,7 @@ public class OrderController {
         return ResponseEntity.ok(orderDtos);
     }
 
+    @Secured("ROLE_USER")
     @PostMapping("/purchase")
     public ResponseEntity<?> saveOrder(@RequestBody @Valid CardDetailsDto cardDetailsDto){
         var userId=1L;
