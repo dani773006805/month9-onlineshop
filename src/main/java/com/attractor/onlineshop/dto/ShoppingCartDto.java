@@ -12,6 +12,6 @@ import java.util.List;
 @ToString
 public class ShoppingCartDto {
     private Long id;
-    private Long userId;
+    private String userEmail;
     private List<ShoppingCartItemDto> itemDtos = new ArrayList<>();
 }

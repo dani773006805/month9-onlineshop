@@ -1,6 +1,5 @@
 package com.attractor.onlineshop.dto;
 
-import com.attractor.onlineshop.model.User;
 import lombok.*;
 
 import javax.validation.constraints.Future;
@@ -18,7 +17,7 @@ public class CardDetailsDto {
     private Long id;
     @Size(min = 3,message = "min length is 3")
     @NotBlank
-    private String cardName;
+    private String nameOnCard;
     @Size(min = 3,message = "min length is 3")
     @NotBlank
     private String cardType;
@@ -26,6 +25,10 @@ public class CardDetailsDto {
     private String securityCode;
     @Pattern(regexp = "[0-9]{3}")
     private String cardNumber;
-    @Future
-    private LocalDate expirationDate;
+    @Pattern(regexp = "[0-9]{2}")
+    private Integer expirationMonth;
+
+    @Pattern(regexp = "[0-9]{4}")
+    private Integer expirationYear;
+
 }

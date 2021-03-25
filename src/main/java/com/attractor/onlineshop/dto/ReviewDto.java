@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ReviewDto {
     private Long id;
-    private String userName;
+    private String userEmail;
     private Long productId;
     private String text;
     private LocalDateTime date;

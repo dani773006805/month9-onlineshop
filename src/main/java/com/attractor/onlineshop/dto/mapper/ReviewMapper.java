@@ -10,7 +10,7 @@ public class ReviewMapper {
                 .text(review.getText())
                 .id(review.getId())
                 .productId(review.getProduct().getId())
-                .userName(review.getUser().getEmail())
+                .userEmail(review.getUserEmail())
                 .build();
     }
 }
