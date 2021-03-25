@@ -5,8 +5,8 @@ import com.attractor.onlineshop.model.Order;
 import java.util.List;
 
 public interface OrderService {
-    List<Order> findByUserId(Long userId);
+    List<Order> findByUserEmail(String email);
 
-    Order save(Long userId);
+    Order save(String email);
 
 }

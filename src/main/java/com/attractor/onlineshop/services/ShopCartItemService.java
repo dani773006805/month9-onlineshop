@@ -12,7 +12,7 @@ public interface ShopCartItemService {
 
     ShopingCartItem update(ShopingCartItem shopingCartItem);
 
-    ShopingCartItem increment(Long productId, Long userId);
+    ShopingCartItem increment(Long productId, String userEmail);
 
     ShopingCartItem decrement(Long productId, ShoppingCart shoppingCart);
 

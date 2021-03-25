@@ -42,11 +42,13 @@ public class ShopCartItemServiceImpl implements ShopCartItemService {
         return shopCartItemRepository.save(shopingCartItem);
     }
 
-    public ShopingCartItem increment(Long productId, Long userId) {
-        var cart = shoppingCartService.findByUserId(userId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Cart with id %d not found", userId)));
+    public ShopingCartItem increment(Long productId, String email) {
+        var cart = shoppingCartService.findByUserEmail(email).orElseThrow(()->
+                new ResourceNotFoundException("cart is not found"));
+
         var shoppCartItem = new ShopingCartItem();
-        var item = shopCartItemRepository.findByCartIdAndProductid(cart.getId(), productId);
+        var item = shopCartItemRepository
+                .findByCartIdAndProductid(cart.getId(), productId);
         if (item.isPresent()) {
             var existItem = item.get();
             existItem.setUnits(existItem.getUnits() + 1);

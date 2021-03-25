@@ -2,6 +2,8 @@ package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.model.Review;
 import com.attractor.onlineshop.repositories.ReviewRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,8 +17,8 @@ public class ReviewServiceImpl implements ReviewService {
         this.repository = repository;
     }
 
-    public List<Review> findByProductId(Long productId){
-        return repository.findByProductId(productId);
+    public Page<Review> findByProductId(Long productId, Pageable pageable){
+        return repository.findByProductId(productId,pageable);
     }
 
     public Review save(Review review){

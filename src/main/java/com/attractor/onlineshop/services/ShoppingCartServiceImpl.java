@@ -2,7 +2,6 @@ package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.exceptions.ResourceNotFoundException;
 import com.attractor.onlineshop.model.ShoppingCart;
-import com.attractor.onlineshop.model.User;
 import com.attractor.onlineshop.repositories.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,17 +23,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.shopCartItemService = shopCartItemService;
     }
 
-    public Optional<ShoppingCart> findByUserId(Long userId) {
-        return shoppingCartRepository.findByUserId(userId);
+    public Optional<ShoppingCart> findByUserEmail(String email) {
+        return shoppingCartRepository.findByUserEmail(email);
     }
 
     public Optional<ShoppingCart> findById(Long id) {
         return shoppingCartRepository.findById(id);
     }
 
-    public void deleteAllByCartId(Long userId) {
-        var cart = shoppingCartRepository.findByUserId(userId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Cart with userId %d doesn't exist", userId)));
+    public void deleteAllByUserEmail(String email) {
+        var cart = shoppingCartRepository.findByUserEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("Cart with userId %s doesn't exist", email)));
         shopCartItemService.deleteByCartId(cart.getId());
         cart.setTotalPrice(new BigDecimal(0));
         cart.setTotalQuantity(0);
@@ -42,9 +41,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     }
 
-    public ShoppingCart create(User user) {
+    public ShoppingCart create(String email) {
         var cart = ShoppingCart.builder()
-                .user(user)
+                .userEmail(email)
                 .totalPrice(new BigDecimal(0))
                 .totalQuantity(0)
                 .build();

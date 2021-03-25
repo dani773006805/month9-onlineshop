@@ -1,18 +1,17 @@
 package com.attractor.onlineshop.services;
 
 import com.attractor.onlineshop.model.ShoppingCart;
-import com.attractor.onlineshop.model.User;
 
 import java.util.Optional;
 
 public interface ShoppingCartService {
-    Optional<ShoppingCart> findByUserId(Long userId);
+    Optional<ShoppingCart> findByUserEmail(String email);
 
     Optional<ShoppingCart> findById(Long id);
 
-    void deleteAllByCartId(Long userId);
+    void deleteAllByUserEmail(String email);
 
-    ShoppingCart create(User user);
+    ShoppingCart create(String email);
 
     ShoppingCart updateStatus(Long cardId);
 }

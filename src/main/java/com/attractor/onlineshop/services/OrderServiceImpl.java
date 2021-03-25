@@ -15,20 +15,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements OrderService{
-    private UserService userService;
+public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private ProductService productService;
     private ShoppingCartServiceImpl shoppingCartService;
     private ShopCartItemServiceImpl shopCartItemService;
 
+    @Autowired
     public void setProductService(ProductService productServiceImpl) {
         this.productService = productServiceImpl;
-    }
-
-    @Autowired
-    public void setUserService(UserServiceImpl userServiceImpl) {
-        this.userService = userServiceImpl;
     }
 
     @Autowired
@@ -46,17 +41,17 @@ public class OrderServiceImpl implements OrderService{
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> findByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
+    @Override
+    public List<Order> findByUserEmail(String email) {
+        return orderRepository.findAllByUserEmail(email);
     }
 
-    public Order save(Long userId) {
+    public Order save(String email) {
 
-        var shopCart = shoppingCartService.findByUserId(userId).orElseThrow(
-                () -> new UserNotFoundException(String.format("user with id %d not found", userId)));
+        var shopCart = shoppingCartService.findByUserEmail(email).orElseThrow(
+                () -> new UserNotFoundException(String.format("user with id %s not found", email)));
         var order = CardItemOrderMapper.shopCartToOrder(shopCart);
-        order.setUser(userService.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", userId))));
+        order.setUserEmail(email);
         order.setDateCreated(LocalDateTime.now());
         var orderItems = shopCartItemService.findByCartId(shopCart.getId())
                 .stream().map(shopingCartItem -> CardItemOrderMapper.shopItemToOrderItem(shopingCartItem))
@@ -77,7 +72,7 @@ public class OrderServiceImpl implements OrderService{
                 throw new QuantityErrorException(String.format("Product with id %d has less units in stock"));
             }
             product.setUnitsInStock(product.getUnitsInStock() - orderItems.get(i).getUnitsI());
-            if(product.getUnitsInStock()==0){
+            if (product.getUnitsInStock() == 0) {
                 product.setActive(false);
             }
             productService.update(product);
