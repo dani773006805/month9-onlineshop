@@ -16,19 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "shopping_cart")
 public class ShoppingCart extends BaseEntity {
+    private String userEmail;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
-    private List<ShopingCartItem> items=new ArrayList<>();
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<ShopingCartItem> items = new ArrayList<>();
 
     private BigDecimal totalPrice;
     private Integer totalQuantity;
-
-
-
 
 
 }

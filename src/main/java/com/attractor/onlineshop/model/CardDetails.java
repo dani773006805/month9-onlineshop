@@ -19,8 +19,5 @@ public class CardDetails extends BaseEntity {
     private String securityCode;
     private String cardNumber;
     private LocalDate expirationDate;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String userEmail;
 }

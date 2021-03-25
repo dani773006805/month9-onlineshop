@@ -28,12 +28,9 @@ public class Order extends BaseEntity {
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
+    private String userEmail;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
 

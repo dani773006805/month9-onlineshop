@@ -16,9 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "reviews")
 public class Review extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String userEmail;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
