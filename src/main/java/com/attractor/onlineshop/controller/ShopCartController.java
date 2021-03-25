@@ -18,7 +18,7 @@ import java.security.Principal;
 import java.util.stream.Collectors;
 
 
-@CrossOrigin(origins = "http://localhost:4200",allowedHeaders = "Access-Control-Allow-Origin")
+//@CrossOrigin(origins = "http://localhost:4200",allowedHeaders = "Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/carts")
 public class ShopCartController {
