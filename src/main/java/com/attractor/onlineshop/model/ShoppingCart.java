@@ -17,10 +17,6 @@ import java.util.List;
 @Table(name = "shopping_cart")
 public class ShoppingCart extends BaseEntity {
     private String userEmail;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<ShopingCartItem> items = new ArrayList<>();
-
     private BigDecimal totalPrice;
     private Integer totalQuantity;
 

@@ -32,7 +32,7 @@ public class ShopingCartItem extends BaseEntity{
     private Long categoryId;
     private Long productid;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart cart;
 

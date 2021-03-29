@@ -30,7 +30,7 @@ public class Order extends BaseEntity {
 
     private String userEmail;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
