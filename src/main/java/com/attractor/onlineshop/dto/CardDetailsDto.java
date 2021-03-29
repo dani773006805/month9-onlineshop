@@ -25,10 +25,9 @@ public class CardDetailsDto {
     private String securityCode;
     @Pattern(regexp = "[0-9]{3}")
     private String cardNumber;
-    @Pattern(regexp = "[0-9]{2}")
+    @Size(min=1)
     private Integer expirationMonth;
-
-    @Pattern(regexp = "[0-9]{4}")
+    @Size(min = 4,max = 4)
     private Integer expirationYear;
 
 }

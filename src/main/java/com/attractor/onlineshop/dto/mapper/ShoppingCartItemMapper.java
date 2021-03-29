@@ -1,5 +1,6 @@
 package com.attractor.onlineshop.dto.mapper;
 
+import com.attractor.onlineshop.dto.ShoppingCartDto;
 import com.attractor.onlineshop.dto.ShoppingCartItemDto;
 import com.attractor.onlineshop.model.Product;
 import com.attractor.onlineshop.model.ShopingCartItem;
@@ -21,12 +22,19 @@ public class ShoppingCartItemMapper {
     public static ShoppingCartItemDto fromshopCartItemtoDto(ShopingCartItem shopingCartItem){
         return ShoppingCartItemDto.builder()
                 .id(shopingCartItem.getId())
-                .cartId(shopingCartItem.getCart().getId())
+                .productId(shopingCartItem.getProductid())
                 .imageUrl(shopingCartItem.getImageUrl())
                 .unitPrice(shopingCartItem.getUnitPrice())
                 .units(shopingCartItem.getUnits())
                 .name(shopingCartItem.getName())
                 .description(shopingCartItem.getDescription())
+                .build();
+    }
+    public static ShoppingCartDto fromCardToDto(ShoppingCart shoppingCart){
+        return ShoppingCartDto.builder()
+                .id(shoppingCart.getId())
+                .totalQuantity(shoppingCart.getTotalQuantity())
+                .totalPrice(shoppingCart.getTotalPrice())
                 .build();
     }
 }

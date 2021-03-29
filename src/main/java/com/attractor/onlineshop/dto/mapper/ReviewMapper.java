@@ -6,7 +6,7 @@ import com.attractor.onlineshop.model.Review;
 public class ReviewMapper {
     public static ReviewDto fromAll(Review review) {
         return ReviewDto.builder()
-                .date(review.getDate())
+                .date(review.getDate().toLocalDate())
                 .text(review.getText())
                 .id(review.getId())
                 .productId(review.getProduct().getId())

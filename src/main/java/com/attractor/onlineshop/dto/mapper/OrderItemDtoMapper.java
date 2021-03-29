@@ -13,7 +13,7 @@ public class OrderItemDtoMapper {
                 .unitPrice(orderItem.getUnitPrice())
                 .units(orderItem.getUnitsI())
                 .description(orderItem.getDescription())
-                .categoryId(orderItem.getCategoryId())
+                .productId(orderItem.getProductId())
                 .build();
     }
 }

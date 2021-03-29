@@ -17,7 +17,7 @@ public class OrderItemDto {
     private BigDecimal unitPrice;
     private Integer units;
     private String imageUrl;
-    private Long categoryId;
+    private Long productId;
 
 
 }

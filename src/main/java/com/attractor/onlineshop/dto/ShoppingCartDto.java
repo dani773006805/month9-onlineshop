@@ -2,6 +2,7 @@ package com.attractor.onlineshop.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,6 @@ import java.util.List;
 @ToString
 public class ShoppingCartDto {
     private Long id;
-    private String userEmail;
-    private List<ShoppingCartItemDto> itemDtos = new ArrayList<>();
+    private BigDecimal totalPrice;
+    private Integer totalQuantity;
 }

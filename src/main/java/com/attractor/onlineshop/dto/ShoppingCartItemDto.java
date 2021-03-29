@@ -17,5 +17,5 @@ public class ShoppingCartItemDto{
     private BigDecimal unitPrice;
     private Integer units;
     private String imageUrl;
-    private Long cartId;
+    private Long productId;
 }
