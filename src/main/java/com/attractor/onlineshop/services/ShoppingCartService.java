@@ -13,5 +13,5 @@ public interface ShoppingCartService {
 
     ShoppingCart create(String email);
 
-    ShoppingCart updateStatus(Long cardId);
+    ShoppingCart updateStatus(ShoppingCart shoppingCart);
 }

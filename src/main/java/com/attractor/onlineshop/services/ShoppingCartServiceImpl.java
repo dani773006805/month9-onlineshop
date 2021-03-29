@@ -50,22 +50,23 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.save(cart);
     }
 
-    public ShoppingCart updateStatus(Long cardId) {
-        var card = shoppingCartRepository.findById(cardId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Cart with id %d not found", cardId)));
-        var items = shopCartItemService.findByCartId(cardId);
+    public ShoppingCart updateStatus(ShoppingCart card) {
+        var items = shopCartItemService.findByCartId(card.getId());
         BigDecimal totalPrice = new BigDecimal(0);
         Integer totalQuantity = 0;
-        for (int i = 0; i < items.size(); i++) {
-            totalQuantity = totalQuantity + items.get(i).getUnits();
-            var totalPriceDouble = totalPrice.doubleValue();
-            var price = items.get(i).getUnitPrice().doubleValue();
-            totalPrice = new BigDecimal(totalPriceDouble + (price * items.get(i).getUnits()));
+        if (items.size() > 0) {
+            for (int i = 0; i < items.size(); i++) {
+                totalQuantity = totalQuantity + items.get(i).getUnits();
+                var totalPriceDouble = totalPrice.doubleValue();
+                var price = items.get(i).getUnitPrice().doubleValue();
+                totalPrice = new BigDecimal(totalPriceDouble + (price * items.get(i).getUnits()));
+            }
         }
+        var carts=shoppingCartRepository.findAll();
         card.setTotalQuantity(totalQuantity);
         card.setTotalPrice(totalPrice);
-        return shoppingCartRepository.save(card);
-
+        var savedCard=shoppingCartRepository.save(card);
+        return savedCard;
     }
 
 }

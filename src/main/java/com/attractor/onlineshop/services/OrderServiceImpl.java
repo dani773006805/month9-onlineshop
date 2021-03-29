@@ -6,6 +6,7 @@ import com.attractor.onlineshop.exceptions.ResourceNotFoundException;
 import com.attractor.onlineshop.exceptions.UserNotFoundException;
 import com.attractor.onlineshop.model.Order;
 import com.attractor.onlineshop.model.OrderItem;
+import com.attractor.onlineshop.repositories.OrderItemRepository;
 import com.attractor.onlineshop.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,15 @@ public class OrderServiceImpl implements OrderService {
     private ProductService productService;
     private ShoppingCartServiceImpl shoppingCartService;
     private ShopCartItemServiceImpl shopCartItemService;
+    private OrderItemRepository orderItemRepository;
+@Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+@Autowired
+    public void setOrderItemRepository(OrderItemRepository orderItemRepository) {
+        this.orderItemRepository = orderItemRepository;
+    }
 
     @Autowired
     public void setProductService(ProductService productServiceImpl) {
@@ -47,7 +57,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order save(String email) {
-
         var shopCart = shoppingCartService.findByUserEmail(email).orElseThrow(
                 () -> new UserNotFoundException(String.format("user with id %s not found", email)));
         var order = CardItemOrderMapper.shopCartToOrder(shopCart);
@@ -56,10 +65,12 @@ public class OrderServiceImpl implements OrderService {
         var orderItems = shopCartItemService.findByCartId(shopCart.getId())
                 .stream().map(shopingCartItem -> CardItemOrderMapper.shopItemToOrderItem(shopingCartItem))
                 .collect(Collectors.toList());
-        order.setOrderItems(orderItems);
         changeProductQuantity(orderItems);
         var savedOrder = orderRepository.save(order);
+        orderItems.forEach(orderItem -> orderItem.setOrder(savedOrder));
+        orderItemRepository.saveAll(orderItems);
         shopCartItemService.deleteByCartId(shopCart.getId());
+        shoppingCartService.updateStatus(shopCart);
         return savedOrder;
     }
 

@@ -4,6 +4,7 @@ import com.attractor.onlineshop.model.ShopingCartItem;
 import com.attractor.onlineshop.model.ShoppingCart;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShopCartItemService {
     void deleteByCartId(Long cartId);
@@ -17,5 +18,8 @@ public interface ShopCartItemService {
     ShopingCartItem decrement(Long productId, ShoppingCart shoppingCart);
 
     List<ShopingCartItem> findByCartId(Long id);
+
+    void deleteAllByProductId(Long productId, ShoppingCart shoppingCart);
+    Optional<ShopingCartItem> findByProductIdAndCardId(Long productId,Long shoppingCardId);
 
 }

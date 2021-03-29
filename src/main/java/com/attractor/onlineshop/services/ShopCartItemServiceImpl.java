@@ -8,7 +8,11 @@ import com.attractor.onlineshop.repositories.ShopCartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShopCartItemServiceImpl implements ShopCartItemService {
@@ -16,7 +20,9 @@ public class ShopCartItemServiceImpl implements ShopCartItemService {
     private ProductService productService;
     private ShoppingCartServiceImpl shoppingCartService;
 
-    public ShopCartItemServiceImpl(ShopCartItemRepository shopCartItemRepository) {
+
+    @Autowired
+    public void setShopCartItemRepository(ShopCartItemRepository shopCartItemRepository) {
         this.shopCartItemRepository = shopCartItemRepository;
     }
 
@@ -43,7 +49,7 @@ public class ShopCartItemServiceImpl implements ShopCartItemService {
     }
 
     public ShopingCartItem increment(Long productId, String email) {
-        var cart = shoppingCartService.findByUserEmail(email).orElseThrow(()->
+        var cart = shoppingCartService.findByUserEmail(email).orElseThrow(() ->
                 new ResourceNotFoundException("cart is not found"));
 
         var shoppCartItem = new ShopingCartItem();
@@ -59,26 +65,46 @@ public class ShopCartItemServiceImpl implements ShopCartItemService {
             var shopItem = ShoppingCartItemMapper.fromProductToItem(product, cart);
             shoppCartItem = save(shopItem);
         }
-        shoppingCartService.updateStatus(cart.getId());
+        shoppingCartService.updateStatus(cart);
         return shoppCartItem;
     }
 
     public ShopingCartItem decrement(Long productId, ShoppingCart shoppingCart) {
         var shopCartItem = shopCartItemRepository.findByCartIdAndProductid(shoppingCart.getId(), productId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("No cartItem with id %d not found", shoppingCart.getId())));
-        shopCartItem.setUnits(shopCartItem.getUnits() - 1);
-        if (shopCartItem.getUnits() == 0) {
-            shopCartItemRepository.deleteById(shopCartItem.getId());
-            shoppingCartService.updateStatus(shopCartItem.getCart().getId());
+        if (shopCartItem.getUnits() < 2) {
+            var id = shopCartItem.getId();
+            shopCartItemRepository.deleteById(id);
+            shopCartItemRepository.delete(shopCartItem);
+            var cardItemcheck = shopCartItemRepository.findById(id);
+            shoppingCartService.updateStatus(shoppingCart);
             return null;
         } else {
+            shopCartItem.setUnits(shopCartItem.getUnits() - 1);
             var cartItem = update(shopCartItem);
-            shoppingCartService.updateStatus(shopCartItem.getCart().getId());
+            shoppingCartService.updateStatus(shoppingCart);
             return cartItem;
         }
     }
 
+
+    @Override
+    public Optional<ShopingCartItem> findByProductIdAndCardId(Long productId, Long shoppingCardId) {
+        return shopCartItemRepository.findByProductidAndCartId(productId, shoppingCardId);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllByProductId(Long productId, ShoppingCart shoppingCart) {
+        shopCartItemRepository.deleteByProductidAndCartId(productId, shoppingCart.getId());
+        shoppingCartService.updateStatus(shoppingCart);
+    }
+
     public List<ShopingCartItem> findByCartId(Long id) {
-        return shopCartItemRepository.findByCartId(id);
+
+        var items = shopCartItemRepository
+                .findByCartId(id).stream().sorted(Comparator.comparing(ShopingCartItem::getProductid))
+                .collect(Collectors.toList());
+        return items;
     }
 }
