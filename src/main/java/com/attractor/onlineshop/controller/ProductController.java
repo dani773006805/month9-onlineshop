@@ -2,15 +2,16 @@ package com.attractor.onlineshop.controller;
 
 import com.attractor.onlineshop.dto.mapper.ProductMapper;
 import com.attractor.onlineshop.exceptions.ResourceNotFoundException;
-import com.attractor.onlineshop.model.Product;
 import com.attractor.onlineshop.services.ProductService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
-//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/shop")
 public class ProductController {

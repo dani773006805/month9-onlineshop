@@ -1,24 +1,19 @@
 package com.attractor.onlineshop.controller;
 
-import com.attractor.onlineshop.dto.ShoppingCartDto;
 import com.attractor.onlineshop.dto.mapper.ShoppingCartItemMapper;
 import com.attractor.onlineshop.exceptions.ResourceNotFoundException;
 import com.attractor.onlineshop.exceptions.UserNotFoundException;
 import com.attractor.onlineshop.services.ShopCartItemService;
 import com.attractor.onlineshop.services.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.stream.Collectors;
 
 
-//@CrossOrigin(origins = "http://localhost:4200",allowedHeaders = "Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/carts")
 public class ShopCartController {
@@ -35,6 +30,21 @@ public class ShopCartController {
         this.shopCartItemService = shopCartItemService;
     }
 
+    @GetMapping("/cart-details")
+    public ResponseEntity<?> getUsersCartDetail(Principal principal){
+        if(principal.getName()==null){
+            throw new ResourceNotFoundException("illegal user name");
+        }
+        var cartOptional=shoppingCartService.findByUserEmail(principal.getName());
+        if (!cartOptional.isPresent()) {
+            shoppingCartService.create(principal.getName());
+        }
+        var cart=shoppingCartService.findByUserEmail(principal.getName()).get();
+        var cartDto=ShoppingCartItemMapper.fromCardToDto(cart);
+        return ResponseEntity.ok(cartDto);
+
+    }
+
     @GetMapping
     public ResponseEntity<?> getUsersCart(Principal principal) {
         if(principal.getName()==null){
@@ -47,12 +57,7 @@ public class ShopCartController {
         var cart=shoppingCartService.findByUserEmail(principal.getName()).get();
         var cartItemDtos = shopCartItemService.findByCartId(cart.getId()).stream()
                 .map(ShoppingCartItemMapper::fromshopCartItemtoDto).collect(Collectors.toList());
-        var cartDto = ShoppingCartDto.builder()
-                .id(cart.getId())
-                .userEmail(cart.getUserEmail())
-                .itemDtos(cartItemDtos)
-                .build();
-        return ResponseEntity.ok(cartDto);
+        return ResponseEntity.ok(cartItemDtos);
     }
 
     @PostMapping("/increment/{productId}")
@@ -62,13 +67,24 @@ public class ShopCartController {
         }
         var cartItemDto = ShoppingCartItemMapper
                 .fromshopCartItemtoDto(shopCartItemService.increment(productId, principal.getName()));
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set("Access-Control-Allow-Methods","*");
-//        responseHeaders.set("Access-Control-Allow-Origin", "*");
-
         return ResponseEntity.status(HttpStatus.CREATED)
-//                .headers(responseHeaders)
                 .body(cartItemDto);
+    }
+
+    @PostMapping("/remove/{itemId}")
+    public ResponseEntity<?> remove(@PathVariable Long itemId,Principal user){
+        if (user == null) {
+            throw new ResourceNotFoundException("user email is null");
+        }
+        var shoppingCart = shoppingCartService.findByUserEmail(user.getName())
+                .orElseThrow(() -> new UserNotFoundException(String.format("cart with id %s not found", user.getName())));
+        shopCartItemService.deleteAllByProductId(itemId,shoppingCart);
+        var check=shopCartItemService.findByProductIdAndCardId(itemId,shoppingCart.getId());
+        if(check.isPresent()){
+            return ResponseEntity.badRequest().body(check.get());
+        }else{
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @PostMapping("/decrement/{itemId}")
@@ -82,7 +98,8 @@ public class ShopCartController {
         if (item == null) {
             return ResponseEntity.ok().body("no more");
         } else {
-            return ResponseEntity.ok(item);
+            var itemDto=ShoppingCartItemMapper.fromshopCartItemtoDto(item);
+            return ResponseEntity.ok(itemDto);
         }
     }
 }
