@@ -13,10 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 @Entity
 @Table(name = "products")
 @Getter
+@ToString
 @Setter
 public class Product extends BaseEntity {
 
@@ -45,6 +45,5 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
-
 
 }
